@@ -437,42 +437,12 @@ node* Q_state::mult_rev(node gate, node cur)
 
 node* Q_state::add( node LHS,  node RHS)
 {
-    node* res = new node(LHS.layer);
-    idx2node[LHS.layer].push_back(res);
+    int layer;
 
-    cout<<"CURRENT STATE OF ADD"<<endl;
-
-    cout<<"LHS"<<endl;
-    cout<<"LHS.layer "<<LHS.layer<<endl;
-    for(int i = 0 ; i < 4 ; i++)
-        cout<<LHS.weight[i]<<" ";
-    cout<<endl;
-    for(int i = 0 ; i < 4 ; i++)
-    {
-        if(LHS.next[i] == const_0)
-            cout<<"const_0  ";
-        else if(LHS.next[i] == const_1)
-            cout<<"const_1  ";
-        else
-            cout<<"("<<LHS.next[i]->layer<<", "<<LHS.next[i]->idx<<")   ";
-    }
-    cout<<endl;
-    cout<<"RHS"<<endl;
-    cout<<"RHS.layer "<<RHS.layer<<endl;
-    for(int i = 0 ; i < 4 ; i++)
-        cout<<RHS.weight[i]<<" ";
-    cout<<endl;
-    for(int i = 0 ; i < 4 ; i++)
-    {
-        if(RHS.next[i] == const_0)
-            cout<<"const_0  ";
-        else if(RHS.next[i] == const_1)
-            cout<<"const_1  ";
-        else
-            cout<<"("<<RHS.next[i]->layer<<", "<<RHS.next[i]->idx<<")   ";
-    }
-    print();
-    cout<<"-----END-----"<<endl;
+    layer = max(LHS.layer, RHS.layer);
+    node* res = new node(layer);
+    if(layer >= 0)
+        idx2node[layer].push_back(res);
 
 
     for(int i = 0 ; i < 4 ; i++)
@@ -512,5 +482,10 @@ node* Q_state::add( node LHS,  node RHS)
     }
     cout<<"END OF ADDING"<<endl;
     print();
+    if(res->layer == -1)
+    {
+        delete res;
+        res = const_0;
+    }
     return res;
 }

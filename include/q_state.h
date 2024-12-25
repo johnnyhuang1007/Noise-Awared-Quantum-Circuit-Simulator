@@ -17,19 +17,24 @@ using namespace std;
 struct node
 {
     int idx;
+    int layer;
+    int pointed = 0;
     node* next[4];
     cplx weight[4];
-    node(int idx):idx(idx)
+    node(int layer):layer(layer)
     {
         for(int i=0;i<4;i++)
         {
             next[i]=nullptr;
             weight[i]={1,0};
         }
-        this->idx = idx;
+        this->layer = layer;
+        this->idx = -1;
     }
     void operator=(node a)
     {
+        pointed = 0;    
+        layer = a.layer;
         idx = a.idx;
         for(int i=0;i<4;i++)
         {
@@ -54,13 +59,17 @@ class Q_state
         void expend_leaf(int);
         node* add( node,  node);
         node* mult( node,  node);
+        node* mult_rev( node,  node);
+
+        void node_apply_UGate(node* cur, cplx u00, cplx u01, cplx u10 , cplx u11);
     public:
         Q_state(){}
         Q_state(int);
         void apply_UGate(int, cplx, cplx, cplx, cplx);
-        void apply_XGate(int);
+        void apply_Control_UGate(int, int, cplx, cplx, cplx, cplx);
         void reduce();
         void print();
+        void print_matrix();
         
 };
 

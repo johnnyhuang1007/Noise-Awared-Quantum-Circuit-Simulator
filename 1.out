@@ -11,29 +11,6 @@ weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i
 AFTER APPLYING U GATE
 gate weight
 (0,0) (1,0) (1,0) (0,0) 
-CURRENT STATE OF ADD
-LHS
-LHS.layer 1
-(0,0) (0,0) (1,0) (1,0) 
-const_1  const_0  const_1  const_0  
-RHS
-RHS.layer 1
-(1,0) (1,0) (0,0) (0,0) 
-const_0  const_0  const_0  const_0  Layer 0:
-Node (0, 0):
-next: (1, 0)    0_node 0_node 0_node 
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
-Layer 1:
-Node (1, 0):
-next: 1_node 0_node 0_node 0_node 
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
-Node (1, 1):
-next: NULL    NULL    NULL    NULL    
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
------END-----
 END OF ADDING
 Layer 0:
 Node (0, 0):
@@ -59,29 +36,6 @@ Node (1, 0):
 next: 0_node 0_node 1_node 0_node 
 weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
 
-CURRENT STATE OF ADD
-LHS
-LHS.layer 1
-(1,0) (0,0) (1,0) (0,0) 
-const_0  const_0  const_0  const_0  
-RHS
-RHS.layer 1
-(0,0) (1,0) (0,0) (1,0) 
-const_0  const_0  const_1  const_1  Layer 0:
-Node (0, 0):
-next: (1, 0)    0_node 0_node 0_node 
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
-Layer 1:
-Node (1, 0):
-next: 0_node 0_node 1_node 0_node 
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
-Node (1, 1):
-next: NULL    NULL    NULL    NULL    
-weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
-
------END-----
 END OF ADDING
 Layer 0:
 Node (0, 0):
@@ -110,6 +64,9 @@ weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i
 REVERSE
 START APPLY
 BEFORE
+gate weight
+(1,0) (0,0) (0,0) (0,0) 
+END OF ADDING
 Layer 0:
 Node (0, 0):
 next: (1, 0)    0_node 0_node 0_node 
@@ -120,5 +77,38 @@ Node (1, 0):
 next: 0_node 0_node 0_node 1_node 
 weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
 
+Node (1, 1):
+next: 0_node 0_node 0_node 0_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
 gate weight
-(0,0) (1,0) (1,0) (0,0) 
+(1,0) (1,0) (1,0) (1,0) 
+END OF ADDING
+Layer 0:
+Node (0, 0):
+next: (1, 0)    0_node 0_node 0_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
+Layer 1:
+Node (1, 0):
+next: 0_node 0_node 0_node 1_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
+Node (1, 1):
+next: 0_node 0_node 0_node 0_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
+Layer 0:
+Node (0, 0):
+next: (1, 0)    0_node 0_node 0_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
+Layer 1:
+Node (1, 0):
+next: 0_node 0_node 0_node 1_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+
+Node (1, 1):
+next: 0_node 0_node 0_node 0_node 
+weight: 1 + 0i  1 + 0i  1 + 0i  1 + 0i  
+

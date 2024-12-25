@@ -9,7 +9,8 @@ int main() {
     q.apply_UGate(1, {0,0}, {1.0,0}, {1.0,0}, {0,0});
     q.print();
     cout<<"REVERSE\n";
-    q.apply_Control_UGate(1, 0, {0,0}, {1.0,0}, {1.0,0}, {0,0});
+    q.apply_Control_UGate(0, 1, {0,0}, {1.0,0}, {1.0,0}, {0,0});
+    
     q.print();
 
     

@@ -207,25 +207,20 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
         for(auto& cur : idx2node[control_layer])
         {
             cout<<"BEFORE"<<endl;
-            print();
             cur->next[2] = mult(gate_node, *cur->next[2]); //G*QBN
             cout<<"AFTER 1"<<endl;
-            print();
             cur->next[3] = mult(gate_node, *cur->next[3]); //G*QBN
             cout<<"AFTER 2"<<endl;
-            print();
             cur->next[1] = mult_rev(gate_node, *cur->next[1]); //G*QBN
             cout<<"AFTER 3"<<endl;
-            print();
             cur->next[3] = mult_rev(gate_node, *cur->next[3]); //G*QBN
             cout<<"AFTER 4"<<endl;
-            print();
             reduce();
         }
     }
     else
     {
-        node U1(target_layer);
+        node U1(control_layer);
         U1.next[0] = const_1;
         U1.weight[0] = {1,0};
         U1.next[1] = const_1;
@@ -235,7 +230,7 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
         U1.next[3] = const_1;
         U1.weight[3] = u00;
 
-        node U2(target_layer);
+        node U2(control_layer);
         U1.next[0] = const_1;
         U1.weight[0] = {0,0};
         U1.next[1] = const_1;
@@ -245,7 +240,7 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
         U1.next[3] = const_1;
         U1.weight[3] = u01;
 
-        node U3(target_layer);
+        node U3(control_layer);
         U1.next[0] = const_1;
         U1.weight[0] = {0,0};
         U1.next[1] = const_1;
@@ -255,7 +250,7 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
         U1.next[3] = const_1;
         U1.weight[3] = u10;
 
-        node U4(target_layer);
+        node U4(control_layer);
         U1.next[0] = const_1;
         U1.weight[0] = {1,0};
         U1.next[1] = const_1;
@@ -269,26 +264,41 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
         for(auto& cur : idx2node[target_layer])
         {
             cout<<"BEFORE"<<endl;
-
-            print();
-            cur->next[0] = add(*mult(U1, *cur->next[0]),*mult(U2, *cur->next[2])); //G*QBN
-            cout<<"AFTER 1"<<endl;
-            print();
+            node n1 = *cur->next[0];
+            node n2 = *cur->next[1];
+            node n3 = *cur->next[2];
+            node n4 = *cur->next[3];
+            node* dummy1 = mult(U1, n1);
+            cout<<"------------------------------------------------------"<<endl;
+            node* dummy2 = mult(U2, n3);
             
-            cur->next[1] = add(*mult(U1, *cur->next[1]),*mult(U2, *cur->next[3])); //G*QBN
-            cout<<"AFTER 2"<<endl;
-            print();
-            cur->next[2] = add(*mult(U3, *cur->next[0]),*mult(U4, *cur->next[2]));
-            cout<<"AFTER 3"<<endl;
-            print();
-            cur->next[3] = add(*mult(U3, *cur->next[1]),*mult(U4, *cur->next[3]));
-            cout<<"AFTER 4"<<endl;
-            print();
+            cout<<"DUMMY1"<<endl;
+            
+            for(int s = 0 ; s < 4 ; s++)
+            {
+                cout<<dummy1->next[s]<<endl;
+                cout<<dummy2->next[s]<<endl;
+            }
 
-            cur->next[0] = add(*mult_rev(U1, *cur->next[0]),*mult_rev(U2, *cur->next[1])); 
-            cur->next[1] = add(*mult_rev(U3, *cur->next[0]),*mult_rev(U4, *cur->next[1]));
-            cur->next[2] = add(*mult_rev(U1, *cur->next[2]),*mult_rev(U2, *cur->next[3]));
-            cur->next[3] = add(*mult_rev(U3, *cur->next[2]),*mult_rev(U4, *cur->next[3]));
+            cur->next[0] = add(*dummy1,*dummy2);
+             //G*QBN
+            cout<<"AFTER 1"<<endl;
+            cur->next[1] = add(*mult(U1, n2),*mult(U2, n4)); //G*QBN
+            cout<<"AFTER 2"<<endl;
+
+            cur->next[2] = add(*mult(U3, n1),*mult(U4, n3));
+            cout<<"AFTER 3"<<endl;
+
+            cur->next[3] = add(*mult(U3, n2),*mult(U4, n4));
+            cout<<"AFTER 4"<<endl;
+            n1 = *cur->next[0];
+            n2 = *cur->next[1];
+            n3 = *cur->next[2];
+            n4 = *cur->next[3];
+            cur->next[0] = add(*mult_rev(U1, n1),*mult_rev(U2, n2)); 
+            cur->next[1] = add(*mult_rev(U3, n1),*mult_rev(U4, n2));
+            cur->next[2] = add(*mult_rev(U1, n3),*mult_rev(U2, n4));
+            cur->next[3] = add(*mult_rev(U3, n3),*mult_rev(U4, n4));
             reduce();
         }
     }
@@ -322,7 +332,6 @@ void Q_state::apply_UGate(int qubit, cplx u00, cplx u01, cplx u10 , cplx u11)
     {
         *cur = *mult(gate_node, *cur); //G*QBN
         reduce();
-        print();
     }
     for(auto cur : cur_layer)
     {
@@ -376,6 +385,8 @@ void Q_state::expend_leaf(int layer)
 node* Q_state::mult(node gate, node cur)
 {
 
+
+
     node RHS(cur.layer);
     node LHS(cur.layer);
 
@@ -400,6 +411,40 @@ node* Q_state::mult(node gate, node cur)
     cout<<"gate weight"<<endl;
     for(int i = 0 ; i < 4 ; i++)
         cout<<gate.weight[i]<<" ";
+    cout<<endl;
+
+    cout<<"CUR next"<<endl;
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        if(cur.next[i] == const_0)
+            cout<<"0_node ";
+        else if(cur.next[i] == const_1)
+            cout<<"1_node ";
+        else
+            cout<<cur.next[i]<<" ";
+    }
+    cout<<endl;
+
+    cout<<"L/RHS next"<<endl;
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        if(LHS.next[i] == const_0)
+            cout<<"0_node ";
+        else if(LHS.next[i] == const_1)
+            cout<<"1_node ";
+        else
+            cout<<LHS.next[i]<<" ";
+    }
+    cout<<endl;
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        if(RHS.next[i] == const_0)
+            cout<<"0_node ";
+        else if(RHS.next[i] == const_1)
+            cout<<"1_node ";
+        else
+            cout<<RHS.next[i]<<" ";
+    }
     cout<<endl;
 
     node* res = add(LHS, RHS);
@@ -440,10 +485,38 @@ node* Q_state::add( node LHS,  node RHS)
     int layer;
 
     layer = max(LHS.layer, RHS.layer);
+    cout<<layer<<endl;
     node* res = new node(layer);
     if(layer >= 0)
         idx2node[layer].push_back(res);
 
+    if(LHS.layer == -1 && RHS.layer == -1)
+    {
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            res->next[i] = const_0;
+            res->weight[i] = {1,0};
+        }
+        return res;
+    }
+    if(LHS.layer == -1)
+    {
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            res->next[i] = RHS.next[i];
+            res->weight[i] = RHS.weight[i];
+        }
+        return res;
+    }
+    if(RHS.layer == -1)
+    {
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            res->next[i] = LHS.next[i];
+            res->weight[i] = LHS.weight[i];
+        }
+        return res;
+    }
 
     for(int i = 0 ; i < 4 ; i++)
     {
@@ -464,6 +537,8 @@ node* Q_state::add( node LHS,  node RHS)
         {
             res->next[i] = RHS.next[i];
             res->weight[i] = RHS.weight[i];
+
+
             continue;
         }
         else if(LHS.next[i] == RHS.next[i])
@@ -472,20 +547,17 @@ node* Q_state::add( node LHS,  node RHS)
             res->weight[i] = LHS.weight[i] + RHS.weight[i];
             continue;
         }
-        
+
         for(int j = 0 ; j < 4 ; j++)
             RHS.next[i]->weight[j] = RHS.weight[i] * RHS.next[i]->weight[j] / LHS.weight[i];
         RHS.weight[i] = LHS.weight[i];
-
+        
         res->next[i] = add(*LHS.next[i], *RHS.next[i]);
         
     }
     cout<<"END OF ADDING"<<endl;
-    print();
-    if(res->layer == -1)
-    {
-        delete res;
-        res = const_0;
-    }
+    cout<<res->layer<<endl;
+
+ 
     return res;
 }

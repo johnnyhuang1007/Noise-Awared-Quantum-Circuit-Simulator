@@ -5,9 +5,9 @@ using namespace std;
 #define zero_node -1
 #define one_node -2
 
-bool approx_equal(cplx a, cplx b)
+bool Q_state::approx_equal(cplx a, cplx b)
 {
-    return abs(a-b) < 1e-6;
+    return abs(a-b) < pow(10,-precision);
 }
 
 Q_state::Q_state(int qb_num)

@@ -10,6 +10,7 @@
 #include <complex>
 #include<cmath>
 #include<algorithm>
+#include<fstream>
 using namespace std;
 
 #define idx_node_vec pair<int, vector<node*>>
@@ -67,6 +68,7 @@ class Q_state
         node* root;
         node* const_0;
         node* const_1;
+        int precision = 3;
         int qb_num;
         cplx header_weight = {1,0};
         vector<vector<node*>> idx2node;   //index : matched nodes
@@ -77,6 +79,8 @@ class Q_state
         node* mult_rev( node,  node);
         void clean_up_redundant_zeros();
         void node_apply_UGate(node* cur, cplx u00, cplx u01, cplx u10 , cplx u11);
+        vector<vector<cplx>> obtain_matrix(node*);
+        bool approx_equal(cplx a, cplx b);
     public:
         Q_state(){}
         Q_state(int);
@@ -85,8 +89,9 @@ class Q_state
         void reduce();
         void print();
         void print_node(node*);
-        void print_matrix();
+        void print_matrix(ostream&);
         void swap(int,int);
+        void set_precision(int p){precision = p;}
         
 };
 

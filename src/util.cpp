@@ -1,4 +1,32 @@
 #include "q_state.h"
+#include <queue>
+
+void Q_state::print_node(node* cur)
+{
+    cout << "idx : " << cur->idx << " layer : " << cur->layer << " pointed : " << cur->pointed << endl;
+    set<node*> q_list;
+    q_list.insert(cur);
+
+    while(!q_list.empty())
+    {
+        node* cur = *q_list.begin();
+        q_list.erase(q_list.begin());
+        cout << "idx : " << cur->idx << " layer : " << cur->layer << " pointed : " << cur->pointed << endl;
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            if(cur->next[i] != nullptr)
+            {
+                q_list.insert(cur->next[i]);
+            }
+        }
+    }
+
+}
+
+cplx ei(double deg)
+{
+    return {cos(deg), sin(deg)};
+}
 
 void Q_state::print_matrix()
 {

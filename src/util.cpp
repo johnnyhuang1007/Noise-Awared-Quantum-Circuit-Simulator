@@ -64,11 +64,11 @@ vector<vector<cplx>> Q_state::obtain_matrix(node* cur)
 {
     if(cur->layer == -1)
     {
-        return {{0}};
+        return {{{0,0}}};
     }
     if(cur->layer == -2)
     {
-        return {{1}};
+        return {{{1,0}}};
     }
 
     int size = 1<<(qb_num - cur->layer);
@@ -84,6 +84,21 @@ vector<vector<cplx>> Q_state::obtain_matrix(node* cur)
         for(int j = 0 ; j < 2 ; j++)
         {
             sub_mat[(2*i)+j] = obtain_matrix(cur->next[(2*i)+j]);   //need optimization
+            if(sub_mat[(2*i)+j].size() == 1 && sub_mat[(2*i)+j][0][0] == cplx({0,0}))
+            {
+                continue;
+            }
+            else if(sub_mat[(2*i)+j].size() == 1 && sub_mat[(2*i)+j][0][0] == cplx({1,0}))
+            {
+                for(int k = 0 ; k < size/2 ; k++)
+                {
+                    for(int l = 0 ; l < size/2 ; l++)
+                    {
+                        mat[(size/2)*i+k][(size/2)*j+l] = cur->weight[(2*i)+j];
+                    }
+                }
+                continue;
+            }
             for(int k = 0 ; k < size/2 ; k++)
             {
                 for(int l = 0 ; l < size/2 ; l++)

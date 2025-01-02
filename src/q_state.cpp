@@ -352,16 +352,22 @@ void Q_state::apply_Control_UGate(int target_layer, int control_layer, cplx u00,
             dummy1 = mult(U1, n2);
             dummy2 = mult(U2, n4);
             cur->next[1] = add(*dummy1,*dummy2); //G*QBN
+            reduce();
 
             cur->next[2] = add(*mult(U3, n1),*mult(U4, n3));
+            reduce();
             cur->next[3] = add(*mult(U3, n2),*mult(U4, n4));
+            reduce();
             n1 = *cur->next[0];
             n2 = *cur->next[1];
             n3 = *cur->next[2];
             n4 = *cur->next[3];
             cur->next[0] = add(*mult_rev(U1, n1),*mult_rev(U2, n2)); 
+            reduce();
             cur->next[1] = add(*mult_rev(U3, n1),*mult_rev(U4, n2));
+            reduce();
             cur->next[2] = add(*mult_rev(U1, n3),*mult_rev(U2, n4));
+            reduce();
             cur->next[3] = add(*mult_rev(U3, n3),*mult_rev(U4, n4));
             
             reduce();
